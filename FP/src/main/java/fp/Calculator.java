@@ -61,7 +61,24 @@ public class Calculator {
 	 * divisores que tiene.
 	 */
 	public static int[] divisors(int n) {
-		throw  new NotImplementedException();
+		
+		if (n < 1)
+			return null;
+		
+		int count = 0;
+		for (int i = n; i > 0; i--)
+			if (n % i == 0)
+				count++;
+		
+		int d[] = new int[count];
+		
+		for (int i = 1; i <= n; i++)
+			if (n % i == 0) {
+				count--;
+				d[count] = i;
+			}
+
+		return d;
 	}
 
 	/*
@@ -107,14 +124,11 @@ public class Calculator {
 	 * dd-MM-yyyy
 	 */
 	public static boolean isLeapYear(String fecha) {
-		int year = 1;
-		try {
-			year = Integer.parseInt(fecha.substring(6));
-		} catch(NumberFormatException e){
-	        return false;
-	    }catch(StringIndexOutOfBoundsException e){
-	        return false;
-	    }
+		if (!isValidDate(fecha))
+			return false;
+		
+		int year = Integer.parseInt(fecha.substring(6));
+
 		if ((year % 4) != 0)
 			return false;
 		if (((year % 100) == 0) && ((year % 400) != 0))
@@ -127,6 +141,21 @@ public class Calculator {
 	 * este metodo devuelve cierto si la fecha es válida
 	 */
 	public static boolean isValidDate(String date) {
-		throw  new NotImplementedException();
+		int day, month, year;
+		try {
+			day = Integer.parseInt(date.substring(0, 2));
+			month = Integer.parseInt(date.substring(3, 5));
+			year = Integer.parseInt(date.substring(6));
+		} catch(NumberFormatException e){
+	        return false;
+	    }catch(StringIndexOutOfBoundsException e){
+	        return false;
+	    }
+		if ((day <= 31) && (day > 0))
+			if ((month <= 12) && (month > 0))
+				if (year > 0)
+					return true;
+		return false;
+					
 	}
 }
