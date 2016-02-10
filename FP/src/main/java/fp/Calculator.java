@@ -2,7 +2,8 @@ package fp;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 public class Calculator {
 
@@ -11,23 +12,49 @@ public class Calculator {
      * este metodo devuelve el Class del object que le pasamos
      */
 	public static Class classTypeOf(Object x) {
-		throw  new NotImplementedException();
+		
+		return x.getClass();
 	}
 
 
 	/*
-     * devuelve una lista con los n números de la serie de fibonacci.
+     * devuelve una lista con los n n�meros de la serie de fibonacci.
      */
 	public static List<Integer> fibonacci(int n) {
-		throw  new NotImplementedException();
+		List<Integer> lista = new ArrayList<Integer>();
+		if (n < 1)
+			return lista;
+		lista.add(1);
+		if (n == 1)
+			return lista;
+		lista.add(1);
+		if (n == 2)
+			return lista;
+		
+
+		for (int i = 2; i < n; i++) {
+			lista.add(lista.get(i - 2) + lista.get(i - 1));
+		}
+		return lista;
 	}
 
 	/*
 	 * Escribir todos los números del number al 0 de step en step.
 	 */
 	public static int[] stepThisNumber(int number, int step) {
-		throw  new NotImplementedException();
+		if (step == 0)
+			return new int[0];
+		int[] lista = new int[(number - 1) / step];
+		
+		int i = 0;
+		while (number > step){
+			number -= step;
+			lista[i] = number;
+
+			i++;
 		}
+	return lista;
+	}
 
 	/*
 	 * Módulo al que se le pasa un número entero del 0 al 20 y devuelve los
@@ -49,15 +76,51 @@ public class Calculator {
 	 * mostrar: cincuenta y seis
 	 */
 	public static String speakToMe(int n) {
-		throw  new NotImplementedException();
+		String nombreNum;
+		String[] unidades = new String[] {"cero", "uno", "dos", "tres", "cuatro", 
+				"cinco", "seis", "siete", "ocho", "nueve"};
+		String[] decenas1 = {"once", "doce", "trece", "catorce", "quince", "dieciséis"};
+		String[] decenas2 = {"dieci", "veinti"};
+		String[] decenas3 = {"diez", "veinte", "treinta", "cuarenta", "cincuenta", 
+				"sesenta", "setenta", "ochenta", "noventa"};
+		
+		if ((n / 10) == 0)
+			return firstUpperCase(unidades[n]);
+		if ((n % 10) == 0)
+			return firstUpperCase(decenas3[(n / 10) - 1]);
+		if (n < 17)
+			return firstUpperCase(decenas1[n - 11]);
+		if (n < 30)
+			return firstUpperCase(decenas2[(n / 10) - 1] + unidades[n % 10]);
+		
+		if (n > 99)
+			return "Más de dos dígitos";
+		
+		return firstUpperCase(decenas3[(n / 10) - 1] + " y " + unidades[n % 10]);
 	}
 
+	public static String firstUpperCase(String s){
+		return s.substring(0, 1).toUpperCase() + s.substring(1);
+	}
 	/*
 	 * este metodo devuelve cierto si el año de la fecha es bisiesto fecha
 	 * dd-MM-yyyy
 	 */
 	public static boolean isLeapYear(String fecha) {
-		throw  new NotImplementedException();
+		int year = 1;
+		try {
+			year = Integer.parseInt(fecha.substring(6));
+		} catch(NumberFormatException e){
+	        return false;
+	    }catch(StringIndexOutOfBoundsException e){
+	        return false;
+	    }
+		if ((year % 4) != 0)
+			return false;
+		if (((year % 100) == 0) && ((year % 400) != 0))
+			return false;
+		return true;
+		
 	}
 
 	/*
