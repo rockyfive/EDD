@@ -2,7 +2,6 @@ package fp;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.io.IOException;
 import java.util.*;
 
 public class Calculator {
@@ -85,7 +84,29 @@ public class Calculator {
 	 * Toma como parámetros una cadena de caracteres y devuelve cierto si la cadena resulta ser un palíndromo
 	 */
 	public static boolean checkIsPalindrome(String cadena) {
-		throw  new NotImplementedException();
+		
+		if (cadena == null) {
+			return false;
+		}
+		cadena = cadena.toLowerCase();
+		String clean = "";
+		String acentos = "áéíóúü";
+		String noacentos = "aeiouu";
+		
+		for (int i = 0; i < cadena.length(); i++){
+			if (Character.isLetter(cadena.charAt(i))) {
+				if (acentos.indexOf(cadena.charAt(i)) != -1) 
+					clean += noacentos.charAt(acentos.indexOf(cadena.charAt(i)));
+				else
+					clean += cadena.charAt(i);
+			}
+		}
+		
+		for (int i = 0; i < clean.length() / 2; i++){
+			if (clean.charAt(i) != clean.charAt(clean.length() - 1 - i))
+				return false;
+		}
+		return true;
 	}
 
 	/*
