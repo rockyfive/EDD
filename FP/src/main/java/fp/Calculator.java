@@ -120,23 +120,22 @@ public class Calculator {
 		String[] unicos = new String[] {"cero", "uno", "dos", "tres", "cuatro", 
 				"cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce",
 				"trece", "catorce", "quince", "dieciséis"};
-		String[] decenas1 = {"dieci", "veinti"};
-		String[] decenas2 = {"veinte", "treinta", "cuarenta", "cincuenta", 
+		String[] decenas = {"dieci", "veinti", "veinte", "treinta", "cuarenta", "cincuenta", 
 				"sesenta", "setenta", "ochenta", "noventa"};
 		
 		if (n < 17)
 			return unicos[n];
 		
 		if ((n % 10) == 0)
-			return decenas2[(n / 10) - 2];
+			return decenas[(n / 10)];
 
 		if (n < 30)
-			return decenas1[(n / 10) - 1] + unicos[n % 10];
+			return decenas[(n / 10) - 1] + unicos[n % 10];
 		
 		if (n > 99)
 			return "Más de dos dígitos";
 		
-		return decenas2[(n / 10) - 2] + " y " + unicos[n % 10];
+		return decenas[(n / 10)] + " y " + unicos[n % 10];
 	}
 
 	/*
