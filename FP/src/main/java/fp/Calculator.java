@@ -8,7 +8,7 @@ public class Calculator {
      * este metodo devuelve el Class del object que le pasamos
      */
 	public static Class classTypeOf(Object x) {
-		
+
 		return x.getClass();
 	}
 
@@ -26,7 +26,7 @@ public class Calculator {
 		lista.add(1);
 		if (n == 2)
 			return lista;
-		
+
 
 		for (int i = 2; i < n; i++) {
 			lista.add(lista.get(i - 2) + lista.get(i - 1));
@@ -41,7 +41,7 @@ public class Calculator {
 		if (step == 0)
 			return new int[0];
 		int[] lista = new int[(number - 1) / step];
-		
+
 		int i = 0;
 		while (number > step){
 			number -= step;
@@ -57,17 +57,17 @@ public class Calculator {
 	 * divisores que tiene.
 	 */
 	public static int[] divisors(int n) {
-		
+
 		if (n < 1)
 			return null;
-		
+
 		int count = 0;
 		for (int i = n; i > 0; i--)
 			if (n % i == 0)
 				count++;
-		
+
 		int d[] = new int[count];
-		
+
 		for (int i = 1; i <= n; i++)
 			if (n % i == 0) {
 				count--;
@@ -81,7 +81,7 @@ public class Calculator {
 	 * Toma como parámetros una cadena de caracteres y devuelve cierto si la cadena resulta ser un palíndromo
 	 */
 	public static boolean checkIsPalindrome(String cadena) {
-		
+
 		if (cadena == null) {
 			return false;
 		}
@@ -89,16 +89,16 @@ public class Calculator {
 		String clean = "";
 		String acentos = "áéíóúàèìòùü";
 		String noacentos = "aeiouaeiouu";
-		
+
 		for (int i = 0; i < cadena.length(); i++){
 			if (Character.isLetter(cadena.charAt(i))) {
-				if (acentos.indexOf(cadena.charAt(i)) != -1) 
+				if (acentos.indexOf(cadena.charAt(i)) != -1)
 					clean += noacentos.charAt(acentos.indexOf(cadena.charAt(i)));
 				else
 					clean += cadena.charAt(i);
 			}
 		}
-		
+
 		for (int i = 0; i < clean.length() / 2; i++){
 			if (clean.charAt(i) != clean.charAt(clean.length() - 1 - i))
 				return false;
@@ -113,29 +113,29 @@ public class Calculator {
 	public static String speakToMe(int n){
 		String number = numberToLetter(n);
 		return number.substring(0, 1).toUpperCase() + number.substring(1);
-	}	
-	
+	}
+
 	public static String numberToLetter(int n) {
-		
-		String[] unicos = new String[] {"cero", "uno", "dos", "tres", "cuatro", 
+
+		String[] unicos = new String[] {"cero", "uno", "dos", "tres", "cuatro",
 				"cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce",
 				"trece", "catorce", "quince", "dieciséis"};
 		String[] decenas1 = {"dieci", "veinti"};
-		String[] decenas2 = {"veinte", "treinta", "cuarenta", "cincuenta", 
+		String[] decenas2 = {"veinte", "treinta", "cuarenta", "cincuenta",
 				"sesenta", "setenta", "ochenta", "noventa"};
-		
+
 		if (n < 17)
 			return unicos[n];
-		
+
 		if ((n % 10) == 0)
 			return decenas2[(n / 10) - 2];
 
 		if (n < 30)
 			return decenas1[(n / 10) - 1] + unicos[n % 10];
-		
+
 		if (n > 99)
 			return "Más de dos dígitos";
-		
+
 		return decenas2[(n / 10) - 2] + " y " + unicos[n % 10];
 	}
 
@@ -146,20 +146,21 @@ public class Calculator {
 	public static boolean isLeapYear(String fecha) {
 		if (!isValidDate(fecha))
 			return false;
+		return isLeapYear(Integer.parseInt(fecha.substring(6)));
+	}
 		
-		int year = Integer.parseInt(fecha.substring(6));
-
+	public static boolean isLeapYear(int year) {
 		if ((year % 4) != 0)
 			return false;
 		if (((year % 100) == 0) && ((year % 400) != 0))
 			return false;
 		return true;
-		
 	}
 
 	/*
 	 * este metodo devuelve cierto si la fecha es válida
 	 */
+	
 	public static boolean isValidDate(String date) {
 		int day, month, year;
 		try {
@@ -172,11 +173,14 @@ public class Calculator {
 	        return false;
 	    }
 		if ((date.charAt(2) == date.charAt(5)) && ("/.- ".indexOf(date.charAt(2)) != -1))
-			if ((day <= 31) && (day > 0))
-				if ((month <= 12) && (month > 0))
-					if (year > 0)
+			if (year > 0)
+				if ((month <= 12) && (month > 0)) {
+					int[] days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+					if (isLeapYear(year))
+						days[1]++;
+					if ((day <= days[month - 1]) && (day > 0))
 						return true;
+				}
 		return false;
-					
 	}
 }
