@@ -142,11 +142,10 @@ public class Calculator {
 	 * este metodo devuelve cierto si el año de la fecha es bisiesto fecha
 	 * dd-MM-yyyy
 	 */
-	public static boolean isLeapYear(String fecha) {
-		if (!isValidDate(fecha))
-			return false;
-		int year = Integer.parseInt(fecha.substring(6));
-		return isLeapYear(year);
+	public static boolean isLeapYear(String date) {
+		int[] dateNum = dateToNumbers(date);
+		if (dateNum == null) return false;
+		return isLeapYear(dateNum[2]);
 	}
 
 	public static boolean isLeapYear(int year) {
@@ -160,35 +159,42 @@ public class Calculator {
 	/*
 	 * este metodo devuelve cierto si la fecha es válida
 	 */
-
+	
 	public static boolean isValidDate(String date) {
+		int[] dateNum = dateToNumbers(date);
+		if (dateNum == null) return false;
+		return isValidDate(dateNum[0], dateNum[1], dateNum[2]);
+	}
+	
+	public static boolean isValidDate(int day, int month, int year) {
+		return isMonthAndYearValid(month, year) && isDayValid(day, month, year);		
+	}
+	
+	public static int[] dateToNumbers(String date) {
 		int day, month, year;
 		try {
 			day = Integer.parseInt(date.substring(0, 2));
 			month = Integer.parseInt(date.substring(3, 5));
 			year = Integer.parseInt(date.substring(6));
 		} catch(NumberFormatException e){
-			return false;
+			return null;
 		}catch(StringIndexOutOfBoundsException e){
-			return false;
+			return null;
 		}
 		if (date.charAt(2) == date.charAt(5) && "/.- ".indexOf(date.charAt(2)) != -1) {
-			if (year > 0 && isMonthInValidRange(month) && IsValidDayOfMonth(day, month, year) ) {
-				return true;
-			}
+			 return new int[] {day, month, year}; 
 		}
-		return false;
+		return null;
+	}
+	
+	public static boolean isDayValid(int day, int month, int year) {
+	int[] daysPerMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	if (isLeapYear(year))
+		daysPerMonth[1]++;	
+	return day > 0 && day <= daysPerMonth[month - 1];
 	}
 
-	public static boolean IsValidDayOfMonth(int day, int month, int year) {
-		int[] daysPerMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-		if (isLeapYear(year)){
-			daysPerMonth[1]++;
-		}
-		return day > 0 && day <= daysPerMonth[month - 1];
-	}
-
-	public static boolean isMonthInValidRange(int month) {
-		return month <= 12 && month > 0;
+	public static boolean isMonthAndYearValid(int month, int year) {
+		return year > 0 && month <= 12 && month > 0;
 	}
 }
