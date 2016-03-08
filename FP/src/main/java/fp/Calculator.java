@@ -86,21 +86,21 @@ public class Calculator {
 			return false;
 		}
 		cadena = cadena.toLowerCase();
-		String clean = "";
+		String limpia = "";
 		String acentos = "áéíóúàèìòùü";
 		String noacentos = "aeiouaeiouu";
 
 		for (int i = 0; i < cadena.length(); i++){
 			if (Character.isLetter(cadena.charAt(i))) {
 				if (acentos.indexOf(cadena.charAt(i)) != -1)
-					clean += noacentos.charAt(acentos.indexOf(cadena.charAt(i)));
+					limpia += noacentos.charAt(acentos.indexOf(cadena.charAt(i)));
 				else
-					clean += cadena.charAt(i);
+					limpia += cadena.charAt(i);
 			}
 		}
 
-		for (int i = 0; i < clean.length() / 2; i++){
-			if (clean.charAt(i) != clean.charAt(clean.length() - 1 - i))
+		for (int i = 0; i < limpia.length() / 2; i++){
+			if (limpia.charAt(i) != limpia.charAt(limpia.length() - 1 - i))
 				return false;
 		}
 		return true;
@@ -117,26 +117,25 @@ public class Calculator {
 
 	public static String numberToLetter(int n) {
 
-		String[] unicos = new String[] {"cero", "uno", "dos", "tres", "cuatro",
-				"cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce",
-				"trece", "catorce", "quince", "dieciséis"};
-		String[] decenas1 = {"dieci", "veinti"};
-		String[] decenas2 = {"veinte", "treinta", "cuarenta", "cincuenta",
-				"sesenta", "setenta", "ochenta", "noventa"};
+		String[] unicos = {"cero", "uno", "dos", "tres", "cuatro",
+				"cinco", "seis", "siete", "ocho", "nueve", "diez", "once",
+				"doce",	"trece", "catorce", "quince", "dieciséis"};
+		String[] decenas = {"dieci", "veinti", "veinte", "treinta", "cuarenta",
+				"cincuenta", "sesenta", "setenta", "ochenta", "noventa"};
 
 		if (n < 17)
 			return unicos[n];
 
 		if ((n % 10) == 0)
-			return decenas2[(n / 10) - 2];
+			return decenas[(n / 10)];
 
 		if (n < 30)
-			return decenas1[(n / 10) - 1] + unicos[n % 10];
+			return decenas[(n / 10) - 1] + unicos[n % 10];
 
 		if (n > 99)
 			return "Más de dos dígitos";
 
-		return decenas2[(n / 10) - 2] + " y " + unicos[n % 10];
+		return decenas[(n / 10)] + " y " + unicos[n % 10];
 	}
 
 	/*
@@ -146,9 +145,10 @@ public class Calculator {
 	public static boolean isLeapYear(String fecha) {
 		if (!isValidDate(fecha))
 			return false;
-		return isLeapYear(Integer.parseInt(fecha.substring(6)));
+		int year = Integer.parseInt(fecha.substring(6));
+		return isLeapYear(year);
 	}
-		
+
 	public static boolean isLeapYear(int year) {
 		if ((year % 4) != 0)
 			return false;
@@ -160,7 +160,7 @@ public class Calculator {
 	/*
 	 * este metodo devuelve cierto si la fecha es válida
 	 */
-	
+
 	public static boolean isValidDate(String date) {
 		int day, month, year;
 		try {
@@ -168,19 +168,27 @@ public class Calculator {
 			month = Integer.parseInt(date.substring(3, 5));
 			year = Integer.parseInt(date.substring(6));
 		} catch(NumberFormatException e){
-	        return false;
-	    }catch(StringIndexOutOfBoundsException e){
-	        return false;
-	    }
-		if ((date.charAt(2) == date.charAt(5)) && ("/.- ".indexOf(date.charAt(2)) != -1))
-			if (year > 0)
-				if ((month <= 12) && (month > 0)) {
-					int[] days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-					if (isLeapYear(year))
-						days[1]++;
-					if ((day <= days[month - 1]) && (day > 0))
-						return true;
-				}
+			return false;
+		}catch(StringIndexOutOfBoundsException e){
+			return false;
+		}
+		if (date.charAt(2) == date.charAt(5) && "/.- ".indexOf(date.charAt(2)) != -1) {
+			if (year > 0 && isMonthInValidRange(month) && IsValidDayOfMonth(day, month, year) ) {
+				return true;
+			}
+		}
 		return false;
+	}
+
+	public static boolean IsValidDayOfMonth(int day, int month, int year) {
+		int[] daysPerMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+		if (isLeapYear(year)){
+			daysPerMonth[1]++;
+		}
+		return day > 0 && day <= daysPerMonth[month - 1];
+	}
+
+	public static boolean isMonthInValidRange(int month) {
+		return month <= 12 && month > 0;
 	}
 }
